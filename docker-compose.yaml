@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  web:
+    container_name: template_web_django
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: ${TARGET}
+    ports:
+      - "${DJANGO_EXPOSE_PORT}:${DJANGO_PORT}"
+    volumes:
+      - .:/app/
+      - ./static/:/app/static/
+      - ./logs/:/logs/
+    restart: on-failure
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    networks:
+      - template-network
+  db:
+    container_name: template_db_postgres
+    image: postgres:${POSTGRES_VERSION}
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${POSTGRES_USER}" ] # Check postgres connection
+      interval: 10s # Interval seconds after each previous check completes
+      timeout: 10s # Keep alive healthcheck test
+      retries: 1 # Retries count
+      start_period: 10s # Delay before start test first time
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    restart: unless-stopped
+    env_file:
+      - .env
+    networks:
+      - template-network
+
+networks:
+  template-network:

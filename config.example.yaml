@@ -1,0 +1,5 @@
+django_static_url: ''
+django_secret_key: ''
+django_allowed_hosts: []
+debug: true
+sentry_dsn: '' # Optional only for sentry

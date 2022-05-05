@@ -1,0 +1,16 @@
+__pycache__/
+.idea/
+*.pyc
+
+venv
+.venv
+
+migrations/
+data/
+static/
+
+# add gunicorn.config.py
+.env
+config.yaml
+
+*.log

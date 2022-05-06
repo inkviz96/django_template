@@ -1,65 +1,81 @@
 LOGGING = {
-'version': 1,
-'disable_existing_loggers': False,
-'filters': {
-    'require_debug_false': {
-        '()': 'django.utils.log.RequireDebugFalse',
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {
+        "require_debug_false": {
+            "()": "django.utils.log.RequireDebugFalse",
+        },
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        },
     },
-    'require_debug_true': {
-        '()': 'django.utils.log.RequireDebugTrue',
+    "formatters": {
+        "root": {
+            "()": "django.utils.log.ServerFormatter",
+            "format": "[%(asctime)s] [%(process)d] [%(levelname)s] %(name)s %(message)s",
+        },
+        "file_format": {
+            "()": "django.utils.log.ServerFormatter",
+            "format": "[%(asctime)s] [%(levelname)s] [%(module)s:%(funcName)s(%(lineno)d)] %(name)s: %(message)s | %(request)s [%(status_code)d]",
+        },
+        "django.db.backends": {
+            "format": "[%(asctime)s] [%(levelname)s] duration:[%(duration)s] | %(sql)s | params:(%(params)s)"
+        },
     },
-},
-'formatters': {
-    'django.server': {
-        '()': 'django.utils.log.ServerFormatter',
-        'format': '[%(server_time)s] [%(levelname)s] %(message)s',
+    "handlers": {
+        "console": {
+            "level": "INFO",
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+            "formatter": "root",
+        },
+        "console_on_not_debug": {
+            "level": "INFO",
+            "filters": ["require_debug_false"],
+            "class": "logging.StreamHandler",
+        },
+        "file_on_not_debug": {
+            "level": "INFO",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filters": ["require_debug_false"],
+            "filename": "logs/gunicorn.log",
+            "formatter": "file_format",
+            "backupCount": 10,
+            "maxBytes": 104857600,
+        },
+        "file": {
+            "level": "DEBUG",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filters": ["require_debug_true"],
+            "filename": "logs/gunicorn.debug.log",
+            "formatter": "file_format",
+            "backupCount": 5,
+            "maxBytes": 52428800,
+        },
+        "django.db.backends": {
+            "level": "DEBUG",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filters": ["require_debug_true"],
+            "filename": "logs/sql.log",
+            "formatter": "django.db.backends",
+            "backupCount": 5,
+            "maxBytes": 52428800,
+        },
     },
-    'root': {
-        '()': 'django.utils.log.ServerFormatter',
-        'format': '[%(asctime)s] [%(process)d] [%(levelname)s] %(name)s %(message)s',
-    }
-},
-'handlers': {
-    'console': {
-        'level': 'INFO',
-        'filters': ['require_debug_true'],
-        'class': 'logging.StreamHandler',
-        'formatter': 'root'
+    "loggers": {
+        "": {
+            "handlers": ["console", "console_on_not_debug"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "django.request": {
+            "handlers": ["file", "file_on_not_debug"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "django.db.backends": {
+            "handlers": ["django.db.backends"],
+            "level": "DEBUG",
+        },
     },
-    'console_on_not_debug': {
-        'level': 'INFO',
-        'filters': ['require_debug_false'],
-        'class': 'logging.StreamHandler',
-    },
-    'django.server': {
-        'level': 'INFO',
-        'class': 'logging.StreamHandler',
-        'formatter': 'django.server',
-    },
-    'file_on_not_debug': {
-        'level': 'INFO',
-        'class': 'logging.FileHandler',
-        'filters': ['require_debug_false'],
-        'filename': 'logs/gunicorn.log',
-        'formatter': 'root',
-    },
-    'file': {
-        'level': 'DEBUG',
-        'class': 'logging.FileHandler',
-        'filters': ['require_debug_true'],
-        'filename': 'logs/gunicorn.debug.log',
-        'formatter': 'root',
-    },
-},
-'loggers': {
-    '': {
-        'handlers': ['console', 'file', 'console_on_not_debug', 'file_on_not_debug'],
-        'level': 'INFO',
-    },
-    'django.server': {
-        'handlers': ['django.server'],
-        'level': 'INFO',
-        'propagate': False,
-    },
-}
 }

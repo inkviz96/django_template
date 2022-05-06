@@ -13,6 +13,11 @@ pyyaml = "6.0"
 psycopg2-binary = "2.9.1"
 django-extensions = "^3.1.5"
 ptpython = "^3.0.20"
+django-dramatiq = "0.10.0"
+dramatiq = "1.11.0"
+APScheduler = "3.8.0"
+pika = "1.2.1"
+rabbitmq = "0.2.0"
 
 [tool.poetry.dev-dependencies]
 

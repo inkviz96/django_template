@@ -14,3 +14,4 @@ static/
 config.yaml
 
 *.log
+db_dump_*.json

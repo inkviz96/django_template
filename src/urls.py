@@ -17,8 +17,9 @@ from django.contrib import admin
 from django.urls import path
 from django.http import HttpResponse
 
+
 urlpatterns = [
-    path('djanog-admin/', admin.site.urls),
+    path('django-admin/', admin.site.urls),
     # Check reach server url
     path('health/', lambda _:HttpResponse(status=200)),
 ]

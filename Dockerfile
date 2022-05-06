@@ -63,9 +63,11 @@ CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
 # `production` image used for runtime
 FROM python-base as production
+COPY --from=builder-base $POETRY_HOME $POETRY_HOME
 COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
 COPY . /app/
 WORKDIR /app
+RUN chmod +x /app/dump.sh
 COPY ./entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

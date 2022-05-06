@@ -37,6 +37,45 @@ services:
       - .env
     networks:
       - template-network
+  dramatiq:
+    container_name: template_dramatiq
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+      - rabbitmq
+    volumes:
+      - ./:/app/
+    restart: unless-stopped
+    env_file: .env
+    command: python manage.py rundramatiq
+    networks:
+      - template-network
+  scheduler:
+    container_name: template_scheduler
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+      - rabbitmq
+      - web
+    restart: unless-stopped
+    env_file:
+      - .env
+    command: python manage.py run_scheduler
+    networks:
+      - template-network
+  rabbitmq:
+    container_name: template_rabbitmq
+    image: rabbitmq:${RABBITMQ_VERSION}
+    environment:
+      RABBITMQ_DEFAULT_USER:
+      RABBITMQ_DEFAULT_PASS:
+      RABBITMQ_DEFAULT_VHOST:
+    networks:
+      - template-network
 
 networks:
   template-network:

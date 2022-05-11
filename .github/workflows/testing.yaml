@@ -10,11 +10,11 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.8'
-      - name: Install dependencies
-        run: make up_build
-      - name: Run tests
-        run: make test
+      - name: Up and build backend
+        run: make up_service_build service=web
         env:
           DJANGO_PORT: 8000
           DJANGO_EXPOSE_PORT: 8000
           TARGET: development
+      - name: Run tests
+        run: make test

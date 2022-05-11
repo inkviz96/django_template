@@ -44,10 +44,11 @@ make test
 src/
 ├── src/                         # django project
 │   ├── logging_settings/
-│   │   ├── logging_config.py    # logging config for unicorn and runserver
-│   │
+│   │   ├── logging_config.py    # logging config for gunicorn and runserver
+│   ├── tasks.py                 # database dump task
 │   │
 ├── gunicorn.config.py           # gunicorn settings config
+├── pytest.ini                   # pytest config
 ```
 
 ### Makefile

@@ -10,6 +10,8 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.8'
+      - name: Create env file
+        run: touch .env
       - name: Up and build backend
         run: make up_service_build service=web
         env:

@@ -18,7 +18,8 @@ dramatiq = "1.11.0"
 APScheduler = "3.8.0"
 pika = "1.2.1"
 rabbitmq = "0.2.0"
-click = "8.0.4"
+pytest-django = "4.5.2"
+requests = "2.27.1"
 
 [tool.poetry.dev-dependencies]
 

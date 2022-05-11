@@ -46,8 +46,8 @@ ps: ## Display all images information
 logs: ## Display all logs for choices project service
 	$(compose) logs --timestamps -f $(service)
 
-test: ## Run tests for all project or for choices tag
-	$(compose) exec web python manage.py test --verbosity=3 --exclude-tag=skip --force-color --tag=$(tag)
+test: ## Run tests for all project
+	$(compose) exec web pytest
 
 help: ## Help description for all make commands
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

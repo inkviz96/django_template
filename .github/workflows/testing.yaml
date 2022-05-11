@@ -14,3 +14,7 @@ jobs:
         run: make up_build
       - name: Run tests
         run: make test
+        env:
+          DJANGO_PORT: 8000
+          DJANGO_EXPOSE_PORT: 8000
+          TARGET: development

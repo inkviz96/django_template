@@ -49,5 +49,8 @@ logs: ## Display all logs for choices project service
 test: ## Run tests for all project
 	$(compose) exec web pytest
 
+up_build_not_par: ## Up and build choices project service not parallel
+	$(compose) up -d --build $(service)
+
 help: ## Help description for all make commands
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

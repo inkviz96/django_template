@@ -1,7 +1,7 @@
 import pytz
 from apscheduler.schedulers.background import BlockingScheduler
 from django.core.management.base import BaseCommand
-from src.dump_database import dump
+from src.tasks import dump
 
 
 class Command(BaseCommand):

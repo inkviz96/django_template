@@ -1,5 +1,7 @@
 #!/bin/sh
 
+
+python manage.py check --deploy
 python manage.py makemigrations
 python manage.py migrate
 python manage.py collectstatic --noinput

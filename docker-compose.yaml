@@ -26,10 +26,10 @@ services:
     image: postgres:${POSTGRES_VERSION}
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "${POSTGRES_USER}" ] # Check postgres connection
-      interval: 10s # Interval seconds after each previous check completes
-      timeout: 10s # Keep alive healthcheck test
-      retries: 1 # Retries count
-      start_period: 10s # Delay before start test first time
+      interval: 5s # Interval seconds after each previous check completes
+      timeout: 5s # Keep alive healthcheck test
+      retries: 0 # Retries count
+      start_period: 5s # Delay before start test first time
     volumes:
       - ./data/db:/var/lib/postgresql/data
     restart: unless-stopped

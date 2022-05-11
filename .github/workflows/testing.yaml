@@ -16,5 +16,8 @@ jobs:
           DJANGO_PORT: 8000
           DJANGO_EXPOSE_PORT: 8000
           TARGET: development
+          POSTGRES_USER: postgres
+          POSTGRES_VERSION: 13.4
+          RABBITMQ_VERSION: 3.8
       - name: Run tests
         run: make test

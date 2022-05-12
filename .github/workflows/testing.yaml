@@ -13,7 +13,7 @@ jobs:
       - name: Create env file
         run: touch .env
       - name: Up database
-        run: make up_service service=db
+        run: make up_service_build service=db
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -25,7 +25,7 @@ jobs:
           TARGET: development
           RABBITMQ_VERSION: 3.8
       - name: Up backend
-        run: make up_service service=web
+        run: make up_service_build service=web
         env:
           DJANGO_PORT: 8000
           DJANGO_EXPOSE_PORT: 8000

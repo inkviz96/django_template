@@ -12,8 +12,16 @@ jobs:
           python-version: '3.8'
       - name: Create env file
         run: touch .env
-      - name: Up and build backend
-        run: make up_build_not_par service=web
+      - name: Up database
+        run: make up_service service=db
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_HOST: db
+          POSTGRES_PORT: 5432
+          POSTGRES_VERSION: 13.4
+      - name: Up backend
+        run: make up_service service=web
         env:
           DJANGO_PORT: 8000
           DJANGO_EXPOSE_PORT: 8000

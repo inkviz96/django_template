@@ -25,9 +25,8 @@ jobs:
           TARGET: development
           RABBITMQ_VERSION: 3.8
       - name: Sleep for 30 seconds
-          uses: jakejarvis/wait-action@master
-          with:
-            time: '15s'
+          run: sleep 15s
+          shell: bash
       - name: Up backend
         run: make up_service_build service=web
         env:

@@ -1,6 +1,7 @@
-from dataclasses import dataclass
-from typing import List, Optional
 import os
+from dataclasses import dataclass
+from typing import List
+
 import yaml
 from marshmallow_dataclass import class_schema
 
@@ -10,10 +11,9 @@ class Config:
     django_static_url: str
     django_secret_key: str
     django_allowed_hosts: List[str]
-    debug: Optional[bool] = False
 
 
-config_path = '/../config.yaml'
+config_path = "/../config.yaml"
 
 with open(os.path.dirname(__file__) + config_path) as f:
     config_data = yaml.safe_load(f)

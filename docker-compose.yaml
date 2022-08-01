@@ -7,12 +7,26 @@ services:
       dockerfile: Dockerfile
       context: .
       target: ${TARGET}
+    logging:
+      driver: json-file # The driver name specifies a logging driver for the service’s containers
+      options:
+        max-size: "200k"
+        max-file: "5"
+    deploy:
+      resources:
+        limits:
+          memory: 2gb
+        reservations:
+          memory: 1gb
+      restart_policy:
+        condition: on-failure # One of none, on-failure or any (default: any)
+        max_attempts: 3 # How many times to attempt to restart a container before giving up (default: never give up).
     ports:
       - "${DJANGO_EXPOSE_PORT}:${DJANGO_PORT}"
     volumes:
       - .:/app/
       - ./static/:/app/static/
-      - ./logs/:/logs/
+      - ./logs/:/logs/:rw
     restart: on-failure
     depends_on:
       db:
@@ -30,6 +44,15 @@ services:
       timeout: 5s # Keep alive healthcheck test
       retries: 0 # Retries count
       start_period: 5s # Delay before start test first time
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
     volumes:
       - ./data/db:/var/lib/postgresql/data
     restart: unless-stopped
@@ -42,9 +65,17 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+        reservations:
+          memory: 32M
     depends_on:
-      - db
-      - rabbitmq
+      db:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
     volumes:
       - ./:/app/
     restart: unless-stopped
@@ -57,10 +88,19 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
     depends_on:
-      - db
-      - rabbitmq
-      - web
+      db:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+      web:
+        condition: service_started
     restart: unless-stopped
     env_file:
       - .env
@@ -70,6 +110,12 @@ services:
   rabbitmq:
     container_name: template_rabbitmq
     image: rabbitmq:${RABBITMQ_VERSION}
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
     environment:
       RABBITMQ_DEFAULT_USER:
       RABBITMQ_DEFAULT_PASS:
